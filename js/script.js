@@ -218,7 +218,16 @@ function crash() {
   explosionElem.style.bottom = document.getElementById("rocket-wrapper").style.bottom;
   explosionElem.style.display = "block";
   explosionElem.classList.add("explode");
-  document.getElementById("status").textContent = "Run crashed!";
+  
+  // If the player blasted off (playerJoined is true) and did not cash out, they lose their total discount.
+  if (playerJoined) {
+    accumulatedDiscount = 0;
+    updateAccumulatedDiscount();
+    document.getElementById("status").textContent = "Run crashed! You lost your discount!";
+  } else {
+    document.getElementById("status").textContent = "Run crashed!";
+  }
+  
   document.getElementById("cashout").disabled = true;
   document.getElementById("ignite").disabled = true;
   setTimeout(startCountdown, 2000);
