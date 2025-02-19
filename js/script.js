@@ -11,10 +11,32 @@ let playerJoined = false;
 let countdownInterval;
 let firstRun = true; // First run: 5 sec; subsequent: 5 sec
 
+// Leaderboard storage
+let leaderboardEntries = [];
+
 // Volume control elements
 const bgVolumeSlider = document.getElementById("bg-volume");
 const explosionVolumeSlider = document.getElementById("explosion-volume");
 const rocketVolumeSlider = document.getElementById("rocket-volume");
+
+// Leaderboard functions
+function addRunToLeaderboard(entry) {
+  leaderboardEntries.unshift(entry); // add to top
+  if (leaderboardEntries.length > 10) {
+    leaderboardEntries.pop();
+  }
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  const leaderboardList = document.getElementById("leaderboard-list");
+  leaderboardList.innerHTML = "";
+  leaderboardEntries.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = entry;
+    leaderboardList.appendChild(li);
+  });
+}
 
 // Update horizontal tick bar using offset values
 function updateBottomScale() {
@@ -116,7 +138,7 @@ function updateDisplay() {
   shipDiscountEl.textContent = discount.toFixed(2) + "% Discount";
   currentDiscountEl.textContent = "Current: " + discount.toFixed(2) + "%";
   
-  // If game is active (i.e. discount is rising), add pulsate effect
+  // Add pulsating effect while game is active
   if (gameActive) {
     shipDiscountEl.classList.add("pulsate");
     currentDiscountEl.classList.add("pulsate");
@@ -188,11 +210,8 @@ function startGame() {
   const bgMusic = document.getElementById("bg-music");
   const explosionSound = document.getElementById("explosion-sound");
   const rocketSound = document.getElementById("rocket-sound");
-  bgMusic.volume = parseFloat(bgVolumeSlider.value);
-  explosionSound.volume = parseFloat(explosionVolumeSlider.value);
-  rocketSound.volume = parseFloat(rocketVolumeSlider.value);
-  
-  bgMusic.play();
+  // Background music is now started in startCountdown, so remove here:
+  // bgMusic.play();
   rocketSound.play();
   
   updateRocketPosition();
@@ -235,8 +254,10 @@ function crash() {
     accumulatedDiscount = 0;
     updateAccumulatedDiscount();
     document.getElementById("status").textContent = "Run crashed! You lost your discount!";
+    addRunToLeaderboard("Crashed! Discount lost.");
   } else {
     document.getElementById("status").textContent = "Run crashed!";
+    addRunToLeaderboard("Run crashed without blasting off.");
   }
   
   document.getElementById("cashout").disabled = true;
@@ -263,6 +284,7 @@ function cashOut() {
   updateAccumulatedDiscount();
   document.getElementById("ship-discount").style.color = "#fff";
   document.getElementById("status").textContent += " Congratulations!";
+  addRunToLeaderboard("Cashed out at " + discount.toFixed(2) + "%");
   setTimeout(startCountdown, 2000);
 }
 
@@ -276,7 +298,7 @@ function startCountdown() {
   
   playerJoined = false;
   const countdownDiv = document.getElementById("countdown");
-  let duration = 5; // Changed countdown duration to 5 seconds
+  let duration = 5; // 5-second countdown
   countdownDiv.style.display = "block";
   countdownDiv.textContent = duration;
   document.getElementById("ignite").disabled = false;
@@ -288,7 +310,7 @@ function startCountdown() {
     } else {
       clearInterval(countdownInterval);
       countdownDiv.style.display = "none";
-      // If the player did not press Blast off before countdown finishes, disable cash out
+      // If the player did not press Blast off before countdown finishes, disable cash out and start run
       if (!playerJoined) {
         document.getElementById("cashout").disabled = true;
         startRun();
