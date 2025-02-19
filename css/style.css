@@ -10,6 +10,23 @@ body {
   padding: 20px;
 }
 
+/* User Info (Sign In) */
+#user-info {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.7);
+  padding: 8px;
+  border-radius: 8px;
+  z-index: 300;
+}
+#user-info input {
+  padding: 4px;
+  margin: 0 4px;
+  border-radius: 4px;
+  border: none;
+}
+
 /* Leaderboard Styling */
 #leaderboard {
   position: fixed;
@@ -56,7 +73,7 @@ h1 {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.8);
   max-width: 800px;
-  margin: 0 auto;
+  margin: 80px auto 0; /* leave space for fixed user info and leaderboard */
   position: relative;
 }
 
