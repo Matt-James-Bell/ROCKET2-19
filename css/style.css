@@ -30,7 +30,7 @@ h1 {
   position: relative;
 }
 
-/* Countdown Display (changed to white) */
+/* Countdown Display */
 #countdown {
   position: absolute;
   top: 50%;
@@ -251,7 +251,7 @@ button:disabled {
   z-index: 2;
 }
 
-/* Sound Bar Control Panel (always visible) */
+/* Sound Bar Control Panel */
 #sound-bar {
   position: fixed;
   bottom: 20px;
