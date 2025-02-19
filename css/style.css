@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+/* Global Styles */
+body {
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #0a0a0a, #151515, #202020);
+  color: #e0e0e0;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Smaller Title */
+h1 {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #fff;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+/* Game Container */
+#game-container {
+  background: rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Countdown Display (changed to white) */
+#countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  color: #fff;
+  z-index: 100;
+}
+
+/* Rocket Container */
+#rocket-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../img/space6.jpg') no-repeat center center;
+  background-size: cover;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
+}
+
+/* Rocket Wrapper */
+#rocket-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  height: 160px;
+  transition: left 0.2s ease, bottom 0.2s ease;
+}
+
+/* Rocket Image */
+#rocket {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  z-index: 3;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.7));
+}
+
+/* Real-time Discount Display */
+#ship-discount {
+  position: absolute;
+  bottom: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1em;
+  margin-bottom: 2px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+/* Explosion Image */
+#explosion {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+  display: none;
+  z-index: 4;
+}
+
+/* Bottom Tick Bar */
+#bottom-scale {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  border-top: 1px solid #fff;
+  background: rgba(0,0,0,0.4);
+}
+
+/* Tick Marks and Labels */
+.tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 10px;
+  background: #fff;
+}
+.tick-label {
+  position: absolute;
+  bottom: 10px;
+  font-size: 10px;
+  color: #fff;
+}
+.tick-label.highlight {
+  font-size: 14px;
+  font-weight: bold;
+}
+.tick-marker {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 30px;
+  background: red;
+}
+
+/* Vertical Ticker */
+#vertical-ticker {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  border-left: 1px solid #fff;
+  background: rgba(0,0,0,0.4);
+}
+.v-tick {
+  position: absolute;
+  left: 0;
+  width: 8px;
+  height: 1px;
+  background: #fff;
+}
+.v-tick-label {
+  position: absolute;
+  left: 10px;
+  font-size: 10px;
+  color: #fff;
+}
+.v-tick-marker {
+  position: absolute;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: red;
+}
+
+/* Buttons and Info */
+#button-container {
+  display: inline-flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+#bottom-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+}
+#discount-display, #current-discount {
+  font-size: 1.2em;
+  background: rgba(0,0,0,0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+#current-discount {
+  background: #000;
+  color: #90ee90;
+  border: 1px solid #90ee90;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+#status {
+  font-size: 1.2em;
+  margin: 10px 0 20px;
+  color: #ddd;
+}
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+#ignite {
+  background: #ff3b3f;
+  color: #fff;
+}
+#cashout {
+  background: #00c851;
+  color: #fff;
+}
+button:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Flying Objects */
+@keyframes flyBy {
+  0% {
+    left: 100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: -150px;
+    opacity: 0;
+  }
+}
+.flying-object {
+  position: absolute;
+  animation: flyBy 8s linear forwards;
+  pointer-events: none;
+  width: 70px;
+  z-index: 2;
+}
+
+/* Sound Bar Control Panel (always visible) */
+#sound-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 200;
+  text-align: left;
+  background: #333;
+  padding: 10px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.9em;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Quest Adventures Discount Game</title>
+  <!-- Using Open Sans for readability -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <h1>Space Quest Adventures Discount Game</h1>
+    
+    <!-- Countdown display (initial value is 5) -->
+    <div id="countdown">5</div>
+    
+    <!-- Rocket Container with background space6.jpg -->
+    <div id="rocket-container">
+      <div id="rocket-wrapper">
+        <img id="rocket" src="img/rocket4.png" alt="Rocket">
+        <div id="ship-discount">0.00% Discount</div>
+      </div>
+      <img id="explosion" src="img/explosion.png" alt="Explosion">
+      <div id="bottom-scale"></div>
+      <div id="vertical-ticker"></div>
+    </div>
+    
+    <div id="status">Waiting for run...</div>
+    
+    <!-- Buttons Container -->
+    <div id="button-container">
+      <button id="ignite">Blast off</button>
+      <button id="cashout" disabled>Cash Out</button>
+    </div>
+    
+    <!-- Bottom Info Container -->
+    <div id="bottom-info">
+      <div id="discount-display">Total Discount: 0.00%</div>
+      <div id="current-discount">Current: 0.00%</div>
+    </div>
+  </div>
+
+  <!-- Sound Bar Control Panel (always visible) -->
+  <div id="sound-bar">
+    <h3>Sound Bar</h3>
+    <label for="bg-volume">Background Music:</label>
+    <input type="range" id="bg-volume" min="0" max="1" step="0.01" value="0.1">
+    <br>
+    <label for="explosion-volume">Explosion Sound:</label>
+    <input type="range" id="explosion-volume" min="0" max="1" step="0.01" value="0.2">
+    <br>
+    <label for="rocket-volume">Rocket Flight Sound:</label>
+    <input type="range" id="rocket-volume" min="0" max="1" step="0.01" value="0.05">
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="bg-music" src="audio/bgmusic.wav" loop></audio>
+  <audio id="explosion-sound" src="audio/explosion.wav"></audio>
+  <!-- Rocket flight sound uses MP3 -->
+  <audio id="rocket-sound" src="audio/rocket-flight.mp3" loop></audio>
+  <!-- Cash out sound -->
+  <audio id="cashout-sound" src="audio/cashout.wav"></audio>
+  
+  <script src="js/script.js"></script>
+</body>
+</html>
