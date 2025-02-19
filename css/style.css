@@ -264,3 +264,13 @@ button:disabled {
   color: #fff;
   font-size: 0.9em;
 }
+
+/* Pulsate Animation for Discount Text */
+@keyframes pulsate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.pulsate {
+  animation: pulsate 1s ease-in-out infinite;
+}
