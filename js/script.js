@@ -6,37 +6,61 @@ let gameActive = false;
 let crashed = false;
 let crashPoint;
 let startTime;
-let accumulatedDiscount = 0;
 let playerJoined = false;
 let countdownInterval;
 let firstRun = true; // First run: 5 sec; subsequent: 5 sec
 
-// Leaderboard storage
-let leaderboardEntries = [];
+// User authentication and leaderboard storage
+let currentUser = null; // Will be set after sign in
+// Store total discount per user (simulate backend with local object)
+let userDiscounts = {}; // e.g., { "alice": 12.34, "bob": 5.67 }
 
 // Volume control elements
 const bgVolumeSlider = document.getElementById("bg-volume");
 const explosionVolumeSlider = document.getElementById("explosion-volume");
 const rocketVolumeSlider = document.getElementById("rocket-volume");
 
-// Leaderboard functions
-function addRunToLeaderboard(entry) {
-  leaderboardEntries.unshift(entry); // add to top
-  if (leaderboardEntries.length > 10) {
-    leaderboardEntries.pop();
-  }
-  updateLeaderboard();
-}
-
+// Leaderboard functions using userDiscounts
 function updateLeaderboard() {
   const leaderboardList = document.getElementById("leaderboard-list");
   leaderboardList.innerHTML = "";
-  leaderboardEntries.forEach(entry => {
+  // Convert userDiscounts to array of objects and sort descending by discount
+  let entries = [];
+  for (let user in userDiscounts) {
+    entries.push({ user, total: userDiscounts[user] });
+  }
+  entries.sort((a, b) => b.total - a.total);
+  entries.forEach(entry => {
     const li = document.createElement("li");
-    li.textContent = entry;
+    li.textContent = `${entry.user}: ${entry.total.toFixed(2)}%`;
     leaderboardList.appendChild(li);
   });
 }
+
+// Sign In / Out functions
+document.getElementById("signin-btn").addEventListener("click", () => {
+  const usernameInput = document.getElementById("username-input");
+  const username = usernameInput.value.trim();
+  if (username !== "") {
+    currentUser = username;
+    document.getElementById("welcome-msg").textContent = "Welcome, " + currentUser;
+    document.getElementById("signin-btn").style.display = "none";
+    document.getElementById("username-input").style.display = "none";
+    document.getElementById("signout-btn").style.display = "inline-block";
+    // Initialize user's discount if not set
+    if (!userDiscounts[currentUser]) {
+      userDiscounts[currentUser] = 0;
+    }
+    updateLeaderboard();
+  }
+});
+document.getElementById("signout-btn").addEventListener("click", () => {
+  currentUser = null;
+  document.getElementById("welcome-msg").textContent = "Not signed in";
+  document.getElementById("signin-btn").style.display = "inline-block";
+  document.getElementById("username-input").style.display = "inline-block";
+  document.getElementById("signout-btn").style.display = "none";
+});
 
 // Update horizontal tick bar using offset values
 function updateBottomScale() {
@@ -190,6 +214,11 @@ function updateGame() {
 }
 
 function startGame() {
+  // Ensure a user is signed in before starting the game
+  if (!currentUser) {
+    alert("Please sign in to play!");
+    return;
+  }
   discount = 0.00; // Run starts at 0.00%
   crashed = false;
   gameActive = true;
@@ -210,8 +239,7 @@ function startGame() {
   const bgMusic = document.getElementById("bg-music");
   const explosionSound = document.getElementById("explosion-sound");
   const rocketSound = document.getElementById("rocket-sound");
-  // Background music is now started in startCountdown, so remove here:
-  // bgMusic.play();
+  // Background music now starts in startCountdown, so not here.
   rocketSound.play();
   
   updateRocketPosition();
@@ -249,15 +277,14 @@ function crash() {
   explosionElem.style.display = "block";
   explosionElem.classList.add("explode");
   
-  // If the player blasted off (playerJoined is true) and did not cash out, they lose their total discount.
+  // If the player blasted off (playerJoined is true) and did not cash out, they lose their discount.
   if (playerJoined) {
-    accumulatedDiscount = 0;
-    updateAccumulatedDiscount();
+    // Reset current user's total discount for this session.
+    userDiscounts[currentUser] = 0;
+    updateLeaderboard();
     document.getElementById("status").textContent = "Run crashed! You lost your discount!";
-    addRunToLeaderboard("Crashed! Discount lost.");
   } else {
     document.getElementById("status").textContent = "Run crashed!";
-    addRunToLeaderboard("Run crashed without blasting off.");
   }
   
   document.getElementById("cashout").disabled = true;
@@ -280,21 +307,46 @@ function cashOut() {
   document.getElementById("status").textContent = "Cashed out at " + discount.toFixed(2) + "% discount!";
   document.getElementById("cashout").disabled = true;
   document.getElementById("ignite").disabled = true;
-  accumulatedDiscount += discount;
-  updateAccumulatedDiscount();
+  
+  // Add the discount from this run to the current user's total
+  userDiscounts[currentUser] += discount;
+  updateLeaderboard();
+  
   document.getElementById("ship-discount").style.color = "#fff";
   document.getElementById("status").textContent += " Congratulations!";
-  addRunToLeaderboard("Cashed out at " + discount.toFixed(2) + "%");
   setTimeout(startCountdown, 2000);
 }
 
+function updateLeaderboard() {
+  // Already defined above to display userDiscounts.
+  const leaderboardList = document.getElementById("leaderboard-list");
+  leaderboardList.innerHTML = "";
+  let entries = [];
+  for (let user in userDiscounts) {
+    entries.push({ user, total: userDiscounts[user] });
+  }
+  entries.sort((a, b) => b.total - a.total);
+  entries.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = `${entry.user}: ${entry.total.toFixed(2)}%`;
+    leaderboardList.appendChild(li);
+  });
+}
+
 function updateAccumulatedDiscount() {
-  document.getElementById("discount-display").textContent = "Total Discount: " + accumulatedDiscount.toFixed(2) + "%";
+  // No longer used globally; leaderboard now reflects per-user totals.
+  document.getElementById("discount-display").textContent = "Total Discount: " + (currentUser ? userDiscounts[currentUser].toFixed(2) : "0.00") + "%";
 }
 
 function startCountdown() {
   // Start playing background music as soon as countdown begins
   document.getElementById("bg-music").play();
+  
+  // Ensure the player is signed in before starting the countdown
+  if (!currentUser) {
+    document.getElementById("status").textContent = "Please sign in to play!";
+    return;
+  }
   
   playerJoined = false;
   const countdownDiv = document.getElementById("countdown");
