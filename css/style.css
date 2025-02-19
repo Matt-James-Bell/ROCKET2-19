@@ -10,6 +10,36 @@ body {
   padding: 20px;
 }
 
+/* Leaderboard Styling */
+#leaderboard {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 300;
+  max-width: 200px;
+  text-align: left;
+}
+#leaderboard h3 {
+  margin: 0 0 10px;
+  font-size: 1.1em;
+}
+#leaderboard ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+}
+#leaderboard ul li {
+  font-size: 0.9em;
+  border-bottom: 1px solid #444;
+  padding: 2px 0;
+}
+
 /* Smaller Title */
 h1 {
   margin-bottom: 20px;
