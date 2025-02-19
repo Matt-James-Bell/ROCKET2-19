@@ -111,8 +111,19 @@ function updateRocketPosition() {
 }
 
 function updateDisplay() {
-  document.getElementById("ship-discount").textContent = discount.toFixed(2) + "% Discount";
-  document.getElementById("current-discount").textContent = "Current: " + discount.toFixed(2) + "%";
+  const shipDiscountEl = document.getElementById("ship-discount");
+  const currentDiscountEl = document.getElementById("current-discount");
+  shipDiscountEl.textContent = discount.toFixed(2) + "% Discount";
+  currentDiscountEl.textContent = "Current: " + discount.toFixed(2) + "%";
+  
+  // If game is active (i.e. discount is rising), add pulsate effect
+  if (gameActive) {
+    shipDiscountEl.classList.add("pulsate");
+    currentDiscountEl.classList.add("pulsate");
+  } else {
+    shipDiscountEl.classList.remove("pulsate");
+    currentDiscountEl.classList.remove("pulsate");
+  }
 }
 
 function spawnNextFlyingObject() {
